@@ -62,6 +62,7 @@ export default function App() {
 				<NumResults movies={movies} />
 			</NavBar>
 			<Main>
+				{/* Alternative #1 Proppping as children to cut down prop drilling */}
 				<Box>
 					<MovieList movies={movies} />
 				</Box>
@@ -71,6 +72,16 @@ export default function App() {
 						<WatchedMoviesList watched={watched} />
 					</>
 				</Box>
+				{/* Alternative #2 Passing Elements as Props */}
+				{/* <Box element={<MovieList movies={movies} />} />
+				<Box
+					element={
+						<>
+							<WatchedSummary watched={watched} />
+							<WatchedMoviesList watched={watched} />
+						</>
+					}
+				/> */}
 			</Main>
 		</>
 	)
@@ -115,7 +126,10 @@ function Main({ children }) {
 	return <main className="main">{children}</main>
 }
 
+// Alternative #1 Proppping as children to cut down prop drilling
 function Box({ children }) {
+	// Alternative #2 Passing Elements as Props
+	// function Box({ element }) {
 	const [isOpen, setIsOpen] = useState(true)
 
 	return (
@@ -123,6 +137,7 @@ function Box({ children }) {
 			<button className="btn-toggle" onClick={() => setIsOpen(open => !open)}>
 				{isOpen ? '–' : '+'}
 			</button>
+			{/* {isOpen && element} */}
 			{isOpen && children}
 		</div>
 	)
