@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 const average = arr =>
 	arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0)
 
+// const APIKEY = '6cdd8a72' //@erhan10
 const APIKEY = '327c17b6' //@erhan1
 
 export default function App() {
@@ -67,8 +68,8 @@ export default function App() {
 				<Box>
 					{/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
 					{isLoading && <Loader />}
-					{isLoading && !error && <MovieList movies={movies} />}
-					{isLoading && error && <ErrorMessage message={error} />}
+					{!isLoading && !error && <MovieList movies={movies} />}
+					{error && <ErrorMessage message={error} />}
 				</Box>
 				<Box>
 					<>
