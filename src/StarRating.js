@@ -9,7 +9,6 @@ const containerStyle = {
 
 const starContainerStyle = {
 	display: 'flex',
-	gap: '4px',
 }
 
 StarRating.propTypes = {
@@ -56,7 +55,7 @@ export default function StarRating({
 						full={tempRating ? tempRating >= i + 1 : rating >= i + 1} //true or false
 						onRate={() => handleRating(i + 1)}
 						onHoverIn={() => setTempRating(i + 1)}
-						// onHoverOut={() => setTempRating(0)}
+						onHoverOut={() => setTempRating(0)}
 						color={color}
 						size={size}
 					/>
@@ -85,7 +84,7 @@ function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
 			style={starStyle}
 			onClick={onRate}
 			onMouseEnter={onHoverIn}
-			// onMouseLeave={onHoverOut}
+			onMouseLeave={onHoverOut}
 		>
 			{full ? (
 				<svg
