@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import StarRating from './StarRating'
 
 const average = arr =>
 	arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0)
@@ -11,7 +12,8 @@ export default function App() {
 	const [watched, setWatched] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
-	const [query, setQuery] = useState('')
+	// const [query, setQuery] = useState('')
+	const [query, setQuery] = useState('adam')
 	const [selectedId, setSelectedId] = useState(null)
 	// const [selectedId, setSelectedId] = useState('tt1570538')
 	// const tempQuery = 'interstellar'
@@ -59,7 +61,7 @@ export default function App() {
 		function () {
 			async function fetchMovies() {
 				try {
-					//Reset loader state
+					//Start loader state
 					setIsLoading(true)
 					//Reset error state
 					setError('')
@@ -78,7 +80,7 @@ export default function App() {
 					const data = await res.json()
 					// console.log(data)
 
-					//No data returned @ response handling from API server
+					//Blank data returned @ response handling from API server
 					if (data.Response === 'False') throw new Error('Movie not found')
 
 					//Set movielist array
@@ -88,10 +90,12 @@ export default function App() {
 					// console.error('⛔', err.message)
 					setError(err.message)
 				} finally {
+					//Stop loading...
 					setIsLoading(false)
 				}
 			}
 
+			//Search criterion check prior to fetch async function execution
 			if (query.length <= 2) {
 				setMovies([])
 				setError('')
@@ -246,12 +250,105 @@ function Movie({ movie, onSelectMovie }) {
 }
 
 function MovieDetails({ selectedId, onCloseMovie }) {
+	const [movieData, setMovieData] = useState({})
+	const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState('')
+
+	//Rename the received AI movie object properties
+	const {
+		Title: title,
+		Year: year,
+		Poster: poster,
+		Runtime: runtime,
+		imdbRating,
+		Plot: plot,
+		Released: released,
+		Actors: actors,
+		Director: director,
+		Genre: genre,
+	} = movieData
+
+	console.log(title, year)
+
+	useEffect(
+		function () {
+			async function getMovieDetails() {
+				try {
+					//Start loading...
+					setIsLoading(true)
+					//Reset error state
+					setError('')
+
+					//Start fetching data
+					const res = await fetch(
+						`http://www.omdbapi.com/?apikey=${APIKEY}&i=${selectedId}`,
+					)
+					// console.log(res)
+
+					//Response error handling from API server
+					if (!res.ok)
+						throw new Error('Something went wrong with fetching movie details')
+
+					//Receive data
+					const data = await res.json()
+					// console.log(data)
+
+					//Blank data returned @ response handling from API server
+					if (data.Response === 'False')
+						throw new Error('Movie details not found')
+
+					//Set the movie data object
+					setMovieData(data)
+					console.log(data)
+				} catch (err) {
+					// console.error('⛔', err.message)
+					setError(err.message)
+				} finally {
+					//Stop loading...
+					setIsLoading(false)
+				}
+			}
+			getMovieDetails()
+		},
+		[selectedId],
+	)
+
 	return (
 		<div className="details">
-			<button className="btn-back" onClick={onCloseMovie}>
-				&larr;
-			</button>
-			{selectedId}
+			{isLoading ? (
+				<Loader />
+			) : (
+				<>
+					{' '}
+					<header>
+						<button className="btn-back" onClick={onCloseMovie}>
+							&larr;
+						</button>
+						<img src={poster} alt={`Poster of ${title} movie`} />
+						<div className="details-overview">
+							<h2>{title}</h2>
+							<p>
+								{released} &bull; {runtime}
+							</p>
+							<p>{genre}</p>
+							<p>
+								<span>⭐</span>
+								{imdbRating}
+							</p>
+						</div>
+					</header>
+					<section>
+						<div className="rating">
+							<StarRating maxRating={10} size={24} />
+						</div>
+						<p>
+							<em>{plot}</em>
+						</p>
+						<p>Starring {actors}</p>
+						<p>Directed by {director}</p>
+					</section>
+				</>
+			)}
 		</div>
 	)
 }
