@@ -11,8 +11,18 @@ export default function App() {
 	const [watched, setWatched] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
+	const [query, setQuery] = useState('')
 
-	const query = 'interstellar'
+	// const tempQuery = 'interstellar'
+
+	// NOTE:Experiment with useEffect depedency array
+	// useEffect(function () {
+	// 	console.log('After Initial Render')
+	// }, [])
+	// useEffect(function () {
+	// 	console.log('After Every Render')
+	// })
+	// console.log('During Render')
 
 	//NOTE: Fetching w/out useEffect creates infinite loop side-effect at render time!!
 	// fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&s=interstellar`)
@@ -35,39 +45,56 @@ export default function App() {
 	// 	}
 	// 	fetchMovies()
 	// }, [])
-	useEffect(function () {
-		return async function fetchMovies() {
-			try {
-				//Start loader...
-				setIsLoading(true)
-				//Start fetching data
-				const res = await fetch(
-					`http://www.omdbapi.com/?apikey=${APIKEY}&s=${query}`,
-				)
-				console.log(res)
-				//Response error handling from API server
-				if (!res.ok)
-					throw new Error('Something went wrong with fetching movies')
-				//Receive data
-				const data = await res.json()
-				console.log(data)
-				//No data returned @ response handling from API server
-				if (data.Response === 'False') throw new Error('Movie not found')
-				setMovies(data.Search)
-			} catch (err) {
-				console.error('⛔', err.message)
-				setError(err.message)
-			} finally {
-				setIsLoading(false)
+	useEffect(
+		function () {
+			async function fetchMovies() {
+				try {
+					//Reset loader state
+					setIsLoading(true)
+					//Reset error state
+					setError('')
+
+					//Start fetching data
+					const res = await fetch(
+						`http://www.omdbapi.com/?apikey=${APIKEY}&s=${query}`,
+					)
+					// console.log(res)
+
+					//Response error handling from API server
+					if (!res.ok)
+						throw new Error('Something went wrong with fetching movies')
+
+					//Receive data
+					const data = await res.json()
+					// console.log(data)
+
+					//No data returned @ response handling from API server
+					if (data.Response === 'False') throw new Error('Movie not found')
+					setMovies(data.Search)
+				} catch (err) {
+					// console.error('⛔', err.message)
+					setError(err.message)
+				} finally {
+					setIsLoading(false)
+				}
 			}
-		}
-	}, [])
+
+			if (query.length <= 2) {
+				setMovies([])
+				setError('')
+				return
+			}
+
+			fetchMovies()
+		},
+		[query],
+	)
 
 	return (
 		<>
 			<NavBar>
 				<Logo />
-				<Search />
+				<Search query={query} setQuery={setQuery} />
 				<NumResults movies={movies} />
 			</NavBar>
 			<Main>
@@ -129,9 +156,7 @@ function Logo() {
 	)
 }
 
-function Search() {
-	const [query, setQuery] = useState('')
-
+function Search({ query, setQuery }) {
 	return (
 		<input
 			className="search"
