@@ -10,6 +10,9 @@ export default function App() {
 	const [movies, setMovies] = useState([])
 	const [watched, setWatched] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
+	const [error, setError] = useState('')
+
+	const query = 'interstellar'
 
 	//NOTE: Fetching w/out useEffect creates infinite loop side-effect at render time!!
 	// fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&s=interstellar`)
@@ -34,13 +37,29 @@ export default function App() {
 	// }, [])
 	useEffect(function () {
 		return async function fetchMovies() {
-			setIsLoading(true)
-			const res = await fetch(
-				`http://www.omdbapi.com/?apikey=${APIKEY}&s=interstellar`,
-			)
-			const data = await res.json()
-			setMovies(data.Search)
-			setIsLoading(false)
+			try {
+				//Start loader...
+				setIsLoading(true)
+				//Start fetching data
+				const res = await fetch(
+					`http://www.omdbapi.com/?apikey=${APIKEY}&s=${query}`,
+				)
+				console.log(res)
+				//Response error handling from API server
+				if (!res.ok)
+					throw new Error('Something went wrong with fetching movies')
+				//Receive data
+				const data = await res.json()
+				console.log(data)
+				//No data returned @ response handling from API server
+				if (data.Response === 'False') throw new Error('Movie not found')
+				setMovies(data.Search)
+			} catch (err) {
+				console.error('⛔', err.message)
+				setError(err.message)
+			} finally {
+				setIsLoading(false)
+			}
 		}
 	}, [])
 
@@ -53,7 +72,16 @@ export default function App() {
 			</NavBar>
 			<Main>
 				{/* Alternative #1 Proppping as children to cut down prop drilling */}
-				<Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
+				<Box>
+					{/* while loading run the loader component else show the movielist component */}
+					{/* {isLoading ? <Loader /> : <MovieList movies={movies} />}  */}
+					{/* while loading run the loader component */}
+					{isLoading && <Loader />}
+					{/* while not loading and no error display the movielist component */}
+					{!isLoading && !error && <MovieList movies={movies} />}
+					{/* while there is error run the error message component */}
+					{error && <ErrorMessage message={error} />}
+				</Box>
 				<Box>
 					<>
 						<WatchedSummary watched={watched} />
@@ -72,6 +100,15 @@ export default function App() {
 				/> */}
 			</Main>
 		</>
+	)
+}
+
+function ErrorMessage({ message }) {
+	return (
+		<p className="error">
+			<span>⛔</span>
+			{message}
+		</p>
 	)
 }
 
