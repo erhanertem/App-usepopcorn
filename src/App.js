@@ -139,6 +139,7 @@ export default function App() {
 							selectedId={selectedId}
 							onCloseMovie={handleCloseMovie}
 							onAddWatchedMovie={handleAddWatchedMovie}
+							watched={watched} //Transfer this watched movie list to refrain users from rating the same movie more than once.
 						/>
 					) : (
 						<>
@@ -254,11 +255,26 @@ function Movie({ movie, onSelectMovie }) {
 	)
 }
 
-function MovieDetails({ selectedId, onCloseMovie, onAddWatchedMovie }) {
+function MovieDetails({
+	selectedId,
+	onCloseMovie,
+	onAddWatchedMovie,
+	watched,
+}) {
 	const [movieData, setMovieData] = useState({})
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
 	const [userRating, setUserRating] = useState('') //Keeps track of the rating inside the star rating component - extraction state
+
+	//Derived state thru watched list
+	//NOTE: We are only grasping the watched list based on their IDs and trying to make sure if whatever item's ID we clicked is actually residing inside this array.
+	const isWatched = watched.map(movie => movie.imdbID).includes(selectedId)
+	// console.log('🤑', isWatched)
+
+	//Derived state to show stars rating on rated movie
+	const watchedUserRating = watched.find(
+		movie => movie.imdbID === selectedId,
+	)?.userRating //Optional chaining to avoid undefined error
 
 	//Rename the received AI movie object properties
 	const {
@@ -359,17 +375,22 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatchedMovie }) {
 					</header>
 					<section>
 						<div className="rating">
-							<StarRating
-								maxRating={10}
-								size={24}
-								onSetRating={setUserRating}
-							/>
-
-							{/* Show button only if rating is given above 0 */}
-							{userRating > 0 && (
-								<button className="btn-add" onClick={handleAdd}>
-									+ Add to list
-								</button>
+							{!isWatched ? (
+								<>
+									<StarRating
+										maxRating={10}
+										size={24}
+										onSetRating={setUserRating}
+									/>
+									{/* Show button only if rating is given above 0 */}
+									{userRating > 0 && (
+										<button className="btn-add" onClick={handleAdd}>
+											+ Add to list
+										</button>
+									)}
+								</>
+							) : (
+								<p>You rated with movie ⭐ {watchedUserRating}</p>
 							)}
 						</div>
 						<p>
