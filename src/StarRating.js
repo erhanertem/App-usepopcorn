@@ -43,7 +43,7 @@ export default function StarRating({
 
 	function handleRating(rating) {
 		setRating(rating)
-		onSetRating(rating)
+		onSetRating(rating) //transfer current star rating to app.js level to process on watched movie list
 	}
 
 	return (

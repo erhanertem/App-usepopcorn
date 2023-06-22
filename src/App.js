@@ -13,7 +13,7 @@ export default function App() {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
 	// const [query, setQuery] = useState('')
-	const [query, setQuery] = useState('adam')
+	const [query, setQuery] = useState('inception')
 	const [selectedId, setSelectedId] = useState(null)
 	// const [selectedId, setSelectedId] = useState('tt1570538')
 	// const tempQuery = 'interstellar'
@@ -25,6 +25,10 @@ export default function App() {
 	//Handle close action @ movie detail button
 	function handleCloseMovie() {
 		setSelectedId(null)
+	}
+	//Handle Add New Movie to Watched List
+	function handleAddWatchedMovie(newMovieObject) {
+		setWatched(watched => [...watched, newMovieObject])
 	}
 
 	// NOTE:Experiment with useEffect depedency array
@@ -134,6 +138,7 @@ export default function App() {
 						<MovieDetails
 							selectedId={selectedId}
 							onCloseMovie={handleCloseMovie}
+							onAddWatchedMovie={handleAddWatchedMovie}
 						/>
 					) : (
 						<>
@@ -249,10 +254,11 @@ function Movie({ movie, onSelectMovie }) {
 	)
 }
 
-function MovieDetails({ selectedId, onCloseMovie }) {
+function MovieDetails({ selectedId, onCloseMovie, onAddWatchedMovie }) {
 	const [movieData, setMovieData] = useState({})
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
+	const [userRating, setUserRating] = useState('') //Keeps track of the rating inside the star rating component - extraction state
 
 	//Rename the received AI movie object properties
 	const {
@@ -268,7 +274,21 @@ function MovieDetails({ selectedId, onCloseMovie }) {
 		Genre: genre,
 	} = movieData
 
-	console.log(title, year)
+	// console.log(title, year)
+
+	function handleAdd() {
+		const newWatchedMovie = {
+			imdbID: selectedId,
+			title,
+			year,
+			poster,
+			imdbRating: Number(imdbRating),
+			runtime: Number(runtime.split(' ').at(0)),
+			userRating, //transfered star rating from the star component
+		}
+		onAddWatchedMovie(newWatchedMovie) //Transfer movie to the watched movies array
+		onCloseMovie() //Close the movie by deselecting it forcefully
+	}
 
 	useEffect(
 		function () {
@@ -339,7 +359,18 @@ function MovieDetails({ selectedId, onCloseMovie }) {
 					</header>
 					<section>
 						<div className="rating">
-							<StarRating maxRating={10} size={24} />
+							<StarRating
+								maxRating={10}
+								size={24}
+								onSetRating={setUserRating}
+							/>
+
+							{/* Show button only if rating is given above 0 */}
+							{userRating > 0 && (
+								<button className="btn-add" onClick={handleAdd}>
+									+ Add to list
+								</button>
+							)}
 						</div>
 						<p>
 							<em>{plot}</em>
@@ -358,7 +389,7 @@ function WatchedMoviesList({ watched }) {
 		<ul className="list">
 			{watched.map(movie => (
 				<li key={movie.imdbID}>
-					<img src={movie.Poster} alt={`${movie.Title} poster`} />
+					<img src={movie.poster} alt={`${movie.title} poster`} />
 					<h3>{movie.Title}</h3>
 					<div>
 						<p>
@@ -395,7 +426,7 @@ function WatchedSummary({ watched }) {
 				</p>
 				<p>
 					<span>⭐️</span>
-					<span>{avgImdbRating}</span>
+					<span>{avgImdbRating.toFixed(1)}</span>
 				</p>
 				<p>
 					<span>🌟</span>
