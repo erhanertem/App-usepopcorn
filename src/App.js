@@ -35,7 +35,7 @@ export default function App() {
 		setWatched(watched => watched.filter(movie => movie.imdbID !== id))
 	}
 
-	// NOTE:Experiment with useEffect depedency array
+	// // NOTE:Experiment with useEffect dependency array
 	// useEffect(function () {
 	// 	console.log('After Initial Render')
 	// }, [])
@@ -43,6 +43,12 @@ export default function App() {
 	// 	console.log('After Every Render')
 	// })
 	// console.log('During Render')
+	// useEffect(
+	// 	function () {
+	// 		console.log('After Every Query')
+	// 	},
+	// 	[query],
+	// )
 
 	//NOTE: Fetching w/out useEffect creates infinite loop side-effect at render time!!
 	// fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&s=interstellar`)
@@ -354,6 +360,19 @@ function MovieDetails({
 			getMovieDetails()
 		},
 		[selectedId],
+	)
+
+	useEffect(
+		function () {
+			document.title = `Movie | ${title}`
+
+			//Cleanup function
+			return function () {
+				document.title = 'usePopcorn'
+				console.log(`Clean up effect for movie ${title}`)
+			}
+		},
+		[title],
 	)
 
 	return (
