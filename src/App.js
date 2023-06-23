@@ -408,6 +408,22 @@ function MovieDetails({
 		[title],
 	)
 
+	//LISTENER FOR ESC KEY PRESS TO CLOSE A SELECTED MOVIE
+	useEffect(() => {
+		function listener(e) {
+			if (e.code === 'Escape') {
+				onCloseMovie()
+				console.log('CLOSING')
+			}
+		}
+
+		document.addEventListener('keydown', listener)
+
+		return function () {
+			document.removeEventListener('keydown', listener)
+		}
+	}, [onCloseMovie])
+
 	return (
 		<div className="details">
 			{isLoading ? (
