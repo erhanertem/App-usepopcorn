@@ -106,9 +106,8 @@ export default function App() {
 					//Reset error state
 					setError('')
 				} catch (err) {
-					console.error('⛔', err.message, '🚀', err.name)
-
 					if (err.name !== 'AbortError') {
+						console.log('⛔', err.message, '🚀', err.name)
 						setError(err.message)
 					} // Ignore AbortError which is not an error for us
 				} finally {
@@ -124,6 +123,7 @@ export default function App() {
 				return
 			}
 
+			handleCloseMovie()
 			fetchMovies()
 
 			//CLEANUP FUNCTION FOR CANCELLING FETCH REQUEST
