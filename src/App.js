@@ -73,6 +73,8 @@ export default function App() {
 	// }, [])
 	useEffect(
 		function () {
+			const controller = new AbortController() //Browser FETCH API for aborting fetching operations - used for cleanup
+
 			async function fetchMovies() {
 				try {
 					//Start loader state
@@ -83,6 +85,7 @@ export default function App() {
 					//Start fetching data
 					const res = await fetch(
 						`http://www.omdbapi.com/?apikey=${APIKEY}&s=${query}`,
+						{ signal: controller.signal }, // Declare signal property to interract with abortcontroller
 					)
 					// console.log(res)
 
@@ -100,9 +103,14 @@ export default function App() {
 					//Set movielist array
 					setMovies(data.Search)
 					// console.log(data.Search)
+					//Reset error state
+					setError('')
 				} catch (err) {
-					// console.error('⛔', err.message)
-					setError(err.message)
+					console.error('⛔', err.message, '🚀', err.name)
+
+					if (err.name !== 'AbortError') {
+						setError(err.message)
+					} // Ignore AbortError which is not an error for us
 				} finally {
 					//Stop loading...
 					setIsLoading(false)
@@ -117,6 +125,11 @@ export default function App() {
 			}
 
 			fetchMovies()
+
+			//CLEANUP FUNCTION FOR CANCELLING FETCH REQUEST
+			return function () {
+				controller.abort()
+			}
 		},
 		[query],
 	)
