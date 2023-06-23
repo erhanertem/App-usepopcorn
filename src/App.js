@@ -9,7 +9,13 @@ const APIKEY = '327c17b6' //@erhan1
 
 export default function App() {
 	const [movies, setMovies] = useState([])
-	const [watched, setWatched] = useState([])
+
+	// const [watched, setWatched] = useState([])
+	const [watched, setWatched] = useState(function () {
+		const storedValue = localStorage.getItem('watched')
+		return JSON.parse(storedValue)
+	})
+
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
 	const [query, setQuery] = useState('')
@@ -29,11 +35,22 @@ export default function App() {
 	//Handle Add New Movie to Watched List
 	function handleAddWatchedMovie(newMovieObject) {
 		setWatched(watched => [...watched, newMovieObject])
+		// localStorage.setItem(
+		// 	'watched',
+		// 	JSON.stringify([...watched, newMovieObject]), // IMPORTANT!! WE CANT USE watched here as its in stale mode, so we follow the above array construction
+		// )
 	}
 	//Handle Removing a movie from the watched list w/ a filter out by id function
 	function handleDeleteWatchedMovie(id) {
 		setWatched(watched => watched.filter(movie => movie.imdbID !== id))
 	}
+
+	useEffect(
+		function () {
+			localStorage.setItem('watched', JSON.stringify(watched))
+		},
+		[watched],
+	)
 
 	// // NOTE:Experiment with useEffect dependency array
 	// useEffect(function () {
