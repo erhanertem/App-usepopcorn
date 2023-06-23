@@ -155,7 +155,11 @@ export default function App() {
 		<>
 			<NavBar>
 				<Logo />
-				<Search query={query} setQuery={setQuery} />
+				<Search
+					query={query}
+					setQuery={setQuery}
+					setSelectedId={setSelectedId}
+				/>
 				<NumResults movies={movies} />
 			</NavBar>
 			<Main>
@@ -232,7 +236,7 @@ function Logo() {
 	)
 }
 
-function Search({ query, setQuery }) {
+function Search({ query, setQuery, setSelectedId }) {
 	// NOTE: Wrong way of selecting/referencing elements in React
 	// useEffect(function () {
 	// 	const el = document.querySelector('.search')
@@ -240,9 +244,27 @@ function Search({ query, setQuery }) {
 	// 	el.focus()
 	// }, [])
 	const inputEl = useRef(null) //Null usually used @ ref for DOM elements
-	useEffect(function () {
-		inputEl.current.focus() //inpuEl.current is our DOM element. Current is the property passed by useRef
-	}, [])
+	useEffect(
+		function () {
+			function callback(event) {
+				if (document.activeElement === inputEl.current) {
+					return
+				}
+
+				if (event.code === 'Enter') {
+					inputEl.current.focus() //inpuEl.current is our DOM element. Current is the property passed by useRef
+					setQuery('') //Clear the search field
+					setSelectedId(null) //Clear the side details pane
+				}
+			}
+			//Event Listener
+			document.addEventListener('keydown', callback)
+
+			//Cleanup function
+			return () => document.removeEventListener('keydown', callback)
+		},
+		[setQuery, setSelectedId],
+	)
 
 	return (
 		<input
