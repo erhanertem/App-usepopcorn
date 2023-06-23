@@ -12,8 +12,8 @@ export default function App() {
 	const [watched, setWatched] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState('')
-	// const [query, setQuery] = useState('')
-	const [query, setQuery] = useState('inception')
+	const [query, setQuery] = useState('')
+	// const [query, setQuery] = useState('inception')
 	const [selectedId, setSelectedId] = useState(null)
 	// const [selectedId, setSelectedId] = useState('tt1570538')
 	// const tempQuery = 'interstellar'
@@ -226,6 +226,26 @@ function Search({ query, setQuery }) {
 		/>
 	)
 }
+// // --> Instead of using abort used setTimeout to not create too many requests every time we type a letter.
+// function Search({ query, setQuery }) {
+// 	const [message, setMessage] = useState('')
+
+// 	useEffect(() => {
+// 		const wait = setTimeout(() => setQuery(message), 500)
+
+// 		return () => clearTimeout(wait)
+// 	}, [message, setQuery])
+
+// 	return (
+// 		<input
+// 			className="search"
+// 			type="text"
+// 			placeholder="Search movies..."
+// 			value={message}
+// 			onChange={e => setMessage(e.target.value)}
+// 		/>
+// 	)
+// }
 
 function NumResults({ movies }) {
 	return (
