@@ -363,6 +363,14 @@ function MovieDetails({
 	const [error, setError] = useState('')
 	const [userRating, setUserRating] = useState('') //Keeps track of the rating inside the star rating component - extraction state
 
+	const countRef = useRef(0)
+	useEffect(
+		function () {
+			if (userRating) countRef.current++
+		},
+		[userRating],
+	)
+
 	//Derived state thru watched list
 	//NOTE: We are only grasping the watched list based on their IDs and trying to make sure if whatever item's ID we clicked is actually residing inside this array.
 	const isWatched = watched.map(movie => movie.imdbID).includes(selectedId)
@@ -398,6 +406,7 @@ function MovieDetails({
 			imdbRating: Number(imdbRating),
 			runtime: Number(runtime.split(' ').at(0)),
 			userRating, //transfered star rating from the star component
+			countRatingDecisions: countRef.current,
 		}
 		onAddWatchedMovie(newWatchedMovie) //Transfer movie to the watched movies array
 		onCloseMovie() //Close the movie by deselecting it forcefully
