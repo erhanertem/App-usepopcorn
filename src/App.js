@@ -247,10 +247,12 @@ function Search({ query, setQuery, setSelectedId }) {
 	useEffect(
 		function () {
 			function callback(event) {
+				//Disable Enter clearing the search field if the current element we are on is the ref element
 				if (document.activeElement === inputEl.current) {
 					return
 				}
 
+				//If pressed enter out of the search box...
 				if (event.code === 'Enter') {
 					inputEl.current.focus() //inpuEl.current is our DOM element. Current is the property passed by useRef
 					setQuery('') //Clear the search field
@@ -259,7 +261,6 @@ function Search({ query, setQuery, setSelectedId }) {
 			}
 			//Event Listener
 			document.addEventListener('keydown', callback)
-
 			//Cleanup function
 			return () => document.removeEventListener('keydown', callback)
 		},
@@ -363,12 +364,12 @@ function MovieDetails({
 	const [error, setError] = useState('')
 	const [userRating, setUserRating] = useState('') //Keeps track of the rating inside the star rating component - extraction state
 
-	const countRef = useRef(0)
+	const countRef = useRef(0) //Set inital value of 0 for the ref
 	useEffect(
 		function () {
 			if (userRating) countRef.current++
 		},
-		[userRating],
+		[userRating], //ref is being updated each time userRating changes
 	)
 
 	//Derived state thru watched list
