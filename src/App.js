@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import StarRating from './StarRating'
 import { useMovies } from './useMovies'
 import { useLocalStorageState } from './useLocalStorageState'
+import { useKey } from './useKey'
 
 const APIKEY = '327c17b6' //@erhan1
 // const APIKEY = '6cdd8a72' //Alternate @erhan10
@@ -185,28 +186,35 @@ function Search({ query, setQuery, setSelectedId }) {
 	// 	el.focus()
 	// }, [])
 	const inputEl = useRef(null) //Null usually used @ ref for DOM elements
-	useEffect(
-		function () {
-			function callback(event) {
-				//Disable Enter clearing the search field if the current element we are on is the ref element
-				if (document.activeElement === inputEl.current) {
-					return
-				}
 
-				//If pressed enter out of the search box...
-				if (event.code === 'Enter') {
-					inputEl.current.focus() //inpuEl.current is our DOM element. Current is the property passed by useRef
-					setQuery('') //Clear the search field
-					setSelectedId(null) //Clear the side details pane
-				}
-			}
-			//Event Listener
-			document.addEventListener('keydown', callback)
-			//Cleanup function
-			return () => document.removeEventListener('keydown', callback)
-		},
-		[setQuery, setSelectedId],
-	)
+	useKey('Enter', function () {
+		if (document.activeElement === inputEl.current) return
+		inputEl.current.focus() //inpuEl.current is our DOM element. Current is the property passed by useRef
+		setQuery('') //Clear the search field
+		setSelectedId(null) //Clear the side details pane
+	})
+	// useEffect(
+	// 	function () {
+	// 		function callback(event) {
+	// 			//Disable Enter clearing the search field if the current element we are on is the ref element
+	// 			if (document.activeElement === inputEl.current) {
+	// 				return
+	// 			}
+
+	// 			//If pressed enter out of the search box...
+	// 			if (event.code === 'Enter') {
+	// 				inputEl.current.focus() //inpuEl.current is our DOM element. Current is the property passed by useRef
+	// 				setQuery('') //Clear the search field
+	// 				setSelectedId(null) //Clear the side details pane
+	// 			}
+	// 		}
+	// 		//Event Listener
+	// 		document.addEventListener('keydown', callback)
+	// 		//Cleanup function
+	// 		return () => document.removeEventListener('keydown', callback)
+	// 	},
+	// 	[setQuery, setSelectedId],
+	// )
 
 	return (
 		<input
@@ -411,20 +419,21 @@ function MovieDetails({
 	)
 
 	//LISTENER FOR ESC KEY PRESS TO CLOSE A SELECTED MOVIE
-	useEffect(() => {
-		function listener(e) {
-			if (e.code === 'Escape') {
-				onCloseMovie()
-				console.log('CLOSING')
-			}
-		}
+	useKey('Escape', onCloseMovie)
+	// useEffect(() => {
+	// 	function listener(e) {
+	// 		if (e.code === 'Escape') {
+	// 			onCloseMovie()
+	// 			console.log('CLOSING')
+	// 		}
+	// 	}
 
-		document.addEventListener('keydown', listener)
+	// 	document.addEventListener('keydown', listener)
 
-		return function () {
-			document.removeEventListener('keydown', listener)
-		}
-	}, [onCloseMovie])
+	// 	return function () {
+	// 		document.removeEventListener('keydown', listener)
+	// 	}
+	// }, [onCloseMovie])
 
 	return (
 		<div className="details">
