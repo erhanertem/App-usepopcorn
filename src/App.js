@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 import StarRating from './StarRating'
 import { useMovies } from './useMovies'
+import { useLocalStorageState } from './useLocalStorageState'
 
 const APIKEY = '327c17b6' //@erhan1
 // const APIKEY = '6cdd8a72' //Alternate @erhan10
@@ -16,10 +17,11 @@ export default function App() {
 	// const tempQuery = 'interstellar'
 
 	// const [watched, setWatched] = useState([])
-	const [watched, setWatched] = useState(function () {
-		const storedValue = localStorage.getItem('watched')
-		return JSON.parse(storedValue)
-	})
+	// const [watched, setWatched] = useState(function () {
+	// 	const storedValue = localStorage.getItem('watched')
+	// 	return JSON.parse(storedValue) //gETS THGE INITIAL VALUE FROM THE LOCAL STORAGE
+	// })
+	const [watched, setWatched] = useLocalStorageState([], 'watched')
 
 	//Handle movie select from the movie list
 	function handleSelectMovie(id) {
@@ -46,12 +48,12 @@ export default function App() {
 		setWatched(watched => watched.filter(movie => movie.imdbID !== id))
 	}
 
-	useEffect(
-		function () {
-			localStorage.setItem('watched', JSON.stringify(watched))
-		},
-		[watched],
-	)
+	// useEffect(
+	// 	function () {
+	// 		localStorage.setItem('watched', JSON.stringify(watched))
+	// 	},
+	// 	[watched],
+	// )
 
 	// // NOTE:Experiment with useEffect dependency array
 	// useEffect(function () {
