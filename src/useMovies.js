@@ -1,76 +1,72 @@
-import { useEffect, useState } from 'react'
-
-const APIKEY = '327c17b6' //@erhan1
-// const APIKEY = '6cdd8a72' //Alternate @erhan10
+import { useEffect, useState } from 'react';
 
 export function useMovies(query, callback) {
-	const [movies, setMovies] = useState([])
-	const [isLoading, setIsLoading] = useState(false)
-	const [error, setError] = useState('')
+	const APIKEY = '327c17b6'; //@erhan1
+	// const APIKEY = '6cdd8a72' //Alternate @erhan10
+	const [movies, setMovies] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState('');
 
 	useEffect(
 		function () {
-			const controller = new AbortController() //Browser FETCH API for aborting fetching operations - used for cleanup
+			const controller = new AbortController(); //Controls fetching via signal property
+			const signal = controller.signal;
 
-			async function fetchMovies() {
+			// If query statement is absent/not certain length, do not bother to initiate fetching algorithm
+			if (query.length < 3) {
+				setMovies([]);
+				setError('');
+				return;
+			}
+
+			//handleCloseMovie()
+			callback?.();
+
+			//API FETCH
+			// async function fetchMovies() {
+			(async function fetchMovies() {
 				try {
-					//Start loader state
-					setIsLoading(true)
-					//Reset error state
-					setError('')
+					// Start loader
+					setIsLoading(true);
+					// Reset Error status
+					setError('');
 
-					//Start fetching data
-					const res = await fetch(
-						`http://www.omdbapi.com/?apikey=${APIKEY}&s=${query}`,
-						{ signal: controller.signal }, // Declare signal property to interract with abortcontroller
-					)
-					// console.log(res)
+					const res = await fetch(`http://www.omdbapi.com/?apikey=${APIKEY}&s=${query}`, {
+						signal,
+					});
 
-					//Response error handling from API server
-					if (!res.ok)
-						throw new Error('Something went wrong with fetching movies')
+					// console.log(res);
+					if (!res.ok) throw new Error('Something went wrong with fetching movies');
 
-					//Receive data
-					const data = await res.json()
-					// console.log(data)
+					const data = await res.json();
 
-					//Blank data returned @ response handling from API server
-					if (data.Response === 'False') throw new Error('Movie not found')
+					// console.log(data);
+					if (data.Response === 'False') throw new Error('Movie not found');
 
-					//Set movielist array
-					setMovies(data.Search)
-					// console.log(data.Search)
-					//Reset error state
-					setError('')
+					// Render results
+					// console.log(data.Search);
+					setMovies(data.Search);
+					setError('');
 				} catch (err) {
 					if (err.name !== 'AbortError') {
-						console.log('⛔', err.message, '🚀', err.name)
-						setError(err.message)
-					} // Ignore AbortError which is not an error for us
+						console.log(err);
+						setError(err.message); // Deploy error message on UI
+					}
 				} finally {
-					//Stop loading...
-					setIsLoading(false)
+					// Stop loader
+					setIsLoading(false);
 				}
-			}
+			})();
 
-			//Search criterion check prior to fetch async function execution
-			if (query.length <= 2) {
-				setMovies([])
-				setError('')
-				return
-			}
+			// fetchMovies();
 
-			// handleCloseMovie() //We receive this from App component thru callback parameter to this cuzstom hook as follows!
-			callback?.() //Added a callback parameter in order to customize custom hook further
-			fetchMovies()
-
-			//CLEANUP FUNCTION FOR CANCELLING FETCH REQUEST
+			//CLEANUP FUNCTION
 			return function () {
-				controller.abort()
-			}
+				controller.abort();
+			};
 		},
 		[query, callback],
-	)
+	);
 
-	return { movies, isLoading, error } // App component requires these in its own code so we need to return these preferably in an object literal.
+	return { movies, isLoading, error, APIKEY };
 }

@@ -1,20 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react';
 
-export function useLocalStorageState(initialState, localSaveKey) {
-	const [value, setValue] = useState(function () {
-		const storedValue = localStorage.getItem(localSaveKey)
-		// console.log(storedValue)
-		// IMPORTANT! What if we deleted the localstorage after saving it. It wont exist and return null. So before we parse it we have to check if it exists!
-		// return JSON.parse(storedValue) //GETS THGE INITIAL VALUE FROM THE LOCAL STORAGE
-		return storedValue ? JSON.parse(storedValue) : initialState //GETS THGE INITIAL VALUE FROM THE LOCAL STORAGE
-	})
+export function useLocalStorageState(initialState, key) {
+	const [value, setValue] = useState(() => {
+		const storedValue = localStorage.getItem(key);
+		return storedValue ? JSON.parse(storedValue) : initialState;
+	});
 
 	useEffect(
 		function () {
-			localStorage.setItem(localSaveKey, JSON.stringify(value))
+			localStorage.setItem(key, JSON.stringify(value));
 		},
-		[value, localSaveKey],
-	)
+		[value, key],
+	);
 
-	return [value, setValue]
+	return [value, setValue];
 }

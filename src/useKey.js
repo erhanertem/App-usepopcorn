@@ -1,18 +1,23 @@
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
-export function useKey(key, actionFunc) {
-	//LISTENER FOR ESC KEY PRESS TO CLOSE A SELECTED MOVIE
-	useEffect(() => {
-		function listener(e) {
-			if (e.code.toLowerCase() === key.toLowerCase()) {
-				actionFunc()
+export function useKey(key, action) {
+	useEffect(
+		function () {
+			function callback(event) {
+				// console.log(event);
+				if (event.code.toLowerCase() === key.toLowerCase()) {
+					action();
+					// console.log('CLOSING');
+				}
 			}
-		}
 
-		document.addEventListener('keydown', listener)
+			document.addEventListener('keydown', callback);
 
-		return function () {
-			document.removeEventListener('keydown', listener)
-		}
-	}, [key, actionFunc])
+			//Cleanup function
+			return function () {
+				document.removeEventListener('keydown', callback);
+			};
+		},
+		[action, key],
+	);
 }

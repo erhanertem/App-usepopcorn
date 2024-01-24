@@ -1,25 +1,26 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const containerStyle = {
+const constainerStyle = {
 	display: 'flex',
 	alignItems: 'center',
 	gap: '16px',
-} //This information kept outside of the StarRating componet so it doesnt get re-declared each time the component is rendered.
+};
 
 const starContainerStyle = {
 	display: 'flex',
-}
+	// gap: '10px',
+};
 
 StarRating.propTypes = {
-	maxRating: PropTypes.number,
+	maxRating: PropTypes.number.isRequired,
+	defaultRating: PropTypes.number,
 	color: PropTypes.string,
 	size: PropTypes.number,
-	className: PropTypes.string,
 	messages: PropTypes.array,
-	defaultRating: PropTypes.number,
-	onSetRating: PropTypes.func,
-}
+	className: PropTypes.string,
+	onSetExternalRating: PropTypes.func,
+};
 
 export default function StarRating({
 	maxRating = 5,
@@ -28,57 +29,56 @@ export default function StarRating({
 	className = '',
 	messages = [],
 	defaultRating = 0,
-	onSetRating,
+	onSetUserRating,
 }) {
-	const [rating, setRating] = useState(defaultRating)
-	const [tempRating, setTempRating] = useState(0)
-
-	//Customized style object thru props
 	const textStyle = {
 		lineHeight: '1',
 		margin: '0',
 		color,
 		fontSize: `${size / 1.5}px`,
+	};
+
+	const [rating, setRating] = useState(defaultRating);
+	function handleRating(rating) {
+		//> HANDLE INTERNAL RATING
+		setRating(rating);
+		//> HAND OUT THE RATING STATE TO PARENT(APP COMPONENT)
+		onSetUserRating(rating);
 	}
 
-	function handleRating(rating) {
-		setRating(rating)
-		onSetRating(rating) //transfer current star rating to app.js level to process on watched movie list
-	}
+	const [tempRating, setTempRating] = useState(rating);
 
 	return (
-		<div style={containerStyle} className={className}>
+		<div style={constainerStyle} className={className}>
 			<div style={starContainerStyle}>
-				{Array.from({ length: maxRating }, (_, i) => (
-					// <Star key={i} onRate={() => setRating(i + 1)} />
+				{Array.from({ length: maxRating }, (_, index) => (
 					<Star
-						key={i}
-						onRate={() => handleRating(i + 1)}
-						full={tempRating ? tempRating >= i + 1 : rating >= i + 1}
-						onHoverIn={() => setTempRating(i + 1)}
-						onHoverOut={() => setTempRating(0)}
+						key={index}
 						color={color}
 						size={size}
+						full={tempRating ? tempRating >= index + 1 : rating >= index + 1}
+						onRate={() => handleRating(index + 1)}
+						onHoverIn={() => setTempRating(index + 1)}
+						onHoverOut={() => setTempRating(0)}
 					/>
 				))}
 			</div>
 			<p style={textStyle}>
 				{messages.length === maxRating
-					? messages.at(tempRating ? tempRating - 1 : rating - 1)
+					? messages[tempRating ? tempRating - 1 : rating - 1]
 					: tempRating || rating || ''}
 			</p>
 		</div>
-	)
+	);
 }
 
 function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
-	//Customized style object thru props
 	const starStyle = {
 		width: `${size}px`,
 		height: `${size}px`,
 		display: 'block',
 		cursor: 'pointer',
-	}
+	};
 
 	return (
 		<span
@@ -89,21 +89,11 @@ function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
 			onMouseLeave={onHoverOut}
 		>
 			{full ? (
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 20 20"
-					fill={color}
-					stroke={color}
-				>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill={color} stroke={color}>
 					<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
 				</svg>
 			) : (
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke={color}
-				>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke={color}>
 					<path
 						strokeLinecap="round"
 						strokeLinejoin="round"
@@ -113,5 +103,5 @@ function Star({ onRate, full, onHoverIn, onHoverOut, color, size }) {
 				</svg>
 			)}
 		</span>
-	)
+	);
 }
