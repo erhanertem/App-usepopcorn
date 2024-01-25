@@ -19,7 +19,7 @@ export function Logo() {
 	);
 }
 
-export function SearchBar({ query, setQuery }) {
+export function SearchBar({ query, setQuery, setSelectedId }) {
 	const inputElement = useRef(null);
 
 	//FOCUSING ON THE SEARCH BAR @ INITIAL PAGE LAUNCH VIA USEREF() HOOK
@@ -33,6 +33,7 @@ export function SearchBar({ query, setQuery }) {
 		// console.log(inputElement.current);
 		inputElement.current.focus();
 		setQuery('');
+		setSelectedId(null); //Clear the detail pane
 	});
 
 	// useEffect(
