@@ -37,7 +37,7 @@ export function useMovies(query, setSelectedId) {
           // START LOADER
           setIsLoading(true);
           // MAKE API CALL TO OMDB API
-          const response = await fetch(`http://www.omdbapi.com/?apikey=${process.env.REACT_APP_APIKEY}&s=${query}`, {
+          const response = await fetch(`https://www.omdbapi.com/?apikey=${process.env.REACT_APP_APIKEY}&s=${query}`, {
             signal: controller.signal, //Abour controller signal object
           });
           // GUARD CLAUSE - server connection interruoted error
