@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+node_modules/
+
 
 # testing
 /coverage
@@ -13,6 +15,15 @@
 
 # misc
 .DS_Store
+*.DS_Store
+*.vscode
+*.exe
+desktop.ini
+Downloads/
+dist/
+*.vs
+
+*.env
 .env.local
 .env.development.local
 .env.test.local
