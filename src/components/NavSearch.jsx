@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useKey } from '../customHooks/useKey';
 
 export default function NavSearch({ query, setQuery }) {
