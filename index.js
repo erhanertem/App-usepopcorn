@@ -9,10 +9,6 @@ const app = express();
 
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.json('You have hit the backend for this project. Good show!');
-});
-
 app.get('/movies/:query', (req, res) => {
   const options = {
     method: 'GET',
