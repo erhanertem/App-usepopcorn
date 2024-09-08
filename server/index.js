@@ -14,6 +14,10 @@ var corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
+app.get('/', cors(corsOptions), (req, res) => {
+  res.json('You hit the usePopCorn server. Good show!');
+});
+
 app.get('/movies/:query', cors(corsOptions), (req, res) => {
   const options = {
     method: 'GET',
