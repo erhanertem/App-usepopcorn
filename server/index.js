@@ -9,9 +9,17 @@ const app = express();
 
 app.use(cors());
 
-var corsOptions = {
-  origin: 'http://localhost:3000',
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+const allowedOrigins = ['http://localhost:3000', 'https://app-usepopcorn-server-erhan-ertem.onrender.com'];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  optionsSuccessStatus: 200, // For legacy browser support
 };
 
 app.get('/', cors(corsOptions), (req, res) => {
