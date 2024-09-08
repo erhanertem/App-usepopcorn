@@ -1,5 +1,10 @@
 export default function WatchedBoxSummary({ watched }) {
-  const average = (arr) => arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+  const average = (arr) =>
+    arr.reduce((acc, cur, i, arr) => {
+      if (!isNaN(cur)) {
+        return acc + cur / arr.length;
+      } else return acc;
+    }, 0);
 
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));

@@ -9,7 +9,7 @@ export default function WatchedBoxMovieListItem({ movie, onDeleteWatched }) {
       <div>
         <p>
           <span>⭐️</span>
-          <span>{movie.imdbRating}</span>
+          <span>{movie.imdbRating === null ? 'N/A' : movie.imdbRating}</span>
         </p>
         <p>
           <span>🌟</span>
