@@ -6,7 +6,13 @@
   "scripts": {
     "start_dev": "concurrently \"npm run start_dev:frontend\" \"npm run start_dev:backend\"",
     "start_dev:frontend": "npm --prefix client run start:frontend",
-    "start_dev:backend": "npm --prefix server run start:backend"
+    "start_dev:backend": "npm --prefix server run start:backend",
+    "prod_build": "concurrently \"npm run prod_build:frontend\" \"npm run prod_build:backend\"",
+    "prod_buid:frontend": "npm --prefix client run prod_build", 
+    "prod_build:backend":"npm --prefix server run prod_build",
+    "prod_serve": "concurrently \"npm run prod_serve:frontend\" \"npm run prod_serve:backend\"",
+    "prod_serve:frontend": "npm --prefix client run prod_serve",
+    "prod_serve:backend": "npm --prefix server run prod_serve"
   },
   "keywords": [],
   "author": "",
