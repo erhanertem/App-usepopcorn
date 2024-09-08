@@ -20,14 +20,16 @@
 - useState usage
   - Initialize a state with a callback
 
-In addition to the cirriculum:
+In addition to the curriculum:
 
-- Included dotenv via webpack configuration for React App
+- ⛔DEBUNKED Included dotenv via webpack configuration for React App (still doesn't help hide api key)
+- Create a mini backend to serve API access with dotenv secret
 - More flexible useKey custom Hook for multiple key entries
+- Fix null fetched IMDB rating causing NaN average rating error
 
 &emsp;
 
-#### [Use-PopCorn App](https://app-usepopcorn-erhan-ertem.netlify.app/)
+#### [Use-PopCorn App](https://App-usePopcorn_erhan-ertem.onrender.com/)
 
 <img src="./screenshot.webp" width="500px"/>
 
