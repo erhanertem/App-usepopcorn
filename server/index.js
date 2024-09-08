@@ -7,7 +7,11 @@ require('dotenv').config();
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:3000', 'https://app-usepopcorn-server-erhan-ertem.onrender.com'];
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:8001',
+  'https://app-usepopcorn-server-erhan-ertem.onrender.com',
+];
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -23,11 +27,11 @@ const corsOptions = {
 // Use the cors middleware with options
 app.use(cors(corsOptions));
 
-app.get('/', cors(corsOptions), (req, res) => {
+app.get('/', (req, res) => {
   res.json('You hit the usePopCorn server. Good show!');
 });
 
-app.get('/movies/:query', cors(corsOptions), (req, res) => {
+app.get('/movies/:query', (req, res) => {
   const options = {
     method: 'GET',
     url: `https://www.omdbapi.com/?apikey=${process.env.REACT_APP_APIKEY}&s=${req.params.query}`,
