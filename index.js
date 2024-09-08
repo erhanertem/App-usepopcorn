@@ -9,7 +9,12 @@ const app = express();
 
 app.use(cors());
 
-app.get('/movies/:query', (req, res) => {
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.get('/movies/:query', cors(corsOptions), (req, res) => {
   const options = {
     method: 'GET',
     url: `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_APIKEY}&s=${req.params.query}`,
