@@ -96,9 +96,7 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatchedMov
           // START LOADER
           setIsLoading(true);
           // Fetch movie details from OMDB API
-          const response = await fetch(
-            `https://www.omdbapi.com/?apikey=${process.env.REACT_APP_APIKEY}&i=${selectedId}`
-          );
+          const response = await fetch(`http://localhost:8001/movies/id/${selectedId}`);
           // GUARD CLAUSE - check for http error
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

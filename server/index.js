@@ -17,7 +17,20 @@ var corsOptions = {
 app.get('/movies/:query', cors(corsOptions), (req, res) => {
   const options = {
     method: 'GET',
-    url: `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_APIKEY}&s=${req.params.query}`,
+    url: `https://www.omdbapi.com/?apikey=${process.env.REACT_APP_APIKEY}&s=${req.params.query}`,
+    headers: { 'Content-Type': 'application/json' },
+  };
+  axios
+    .request(options)
+    .then((response) => {
+      res.json(response.data);
+    })
+    .catch((error) => console.error(error));
+});
+app.get('/movies/id/:selectedId', cors(corsOptions), (req, res) => {
+  const options = {
+    method: 'GET',
+    url: `https://www.omdbapi.com/?apikey=${process.env.REACT_APP_APIKEY}&i=${req.params.selectedId}`,
     headers: { 'Content-Type': 'application/json' },
   };
   axios
