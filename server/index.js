@@ -7,8 +7,6 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors());
-
 const allowedOrigins = ['http://localhost:3000', 'https://app-usepopcorn-server-erhan-ertem.onrender.com'];
 
 const corsOptions = {
@@ -21,6 +19,9 @@ const corsOptions = {
   },
   optionsSuccessStatus: 200, // For legacy browser support
 };
+
+// Use the cors middleware with options
+app.use(cors(corsOptions));
 
 app.get('/', cors(corsOptions), (req, res) => {
   res.json('You hit the usePopCorn server. Good show!');
