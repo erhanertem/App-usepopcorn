@@ -11,7 +11,6 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "nodemon": "^3.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
@@ -19,7 +18,7 @@
   },
   "scripts": {
     "prod_build": "npm install && npm run build",
-    "prod_serve": "concurrently \"nodemon index.js\" \"npx serve -s build\"",
+    "prod_serve": "concurrently \"node ./src/server.js\" \"npx serve -s build\"",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
     "start:backend": "nodemon index.js",
     "start:frontend": "react-scripts start",
