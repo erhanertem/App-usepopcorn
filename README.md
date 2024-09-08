@@ -29,7 +29,7 @@ In addition to the curriculum:
 
 &emsp;
 
-#### [Use-PopCorn App](https://App-usePopcorn_erhan-ertem.onrender.com/)
+#### [Use-PopCorn App](https://app-usepopcorn-erhan-ertem.onrender.com)
 
 <img src="./screenshot.webp" width="500px"/>
 
