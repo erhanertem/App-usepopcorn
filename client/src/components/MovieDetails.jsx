@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import { useKey } from '../customHooks/useKey';
+
 import StarRating from './StarRating';
 import ErrorMessage from './ErrorMessage';
 import Loader from './Loader';
-import { useKey } from '../customHooks/useKey';
+import URL from '../urls.mjs';
 
 export default function MovieDetails({ selectedId, onCloseMovie, onAddWatchedMovie, watched }) {
   const [movie, setMovie] = useState({});
@@ -96,7 +98,7 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatchedMov
           // START LOADER
           setIsLoading(true);
           // Fetch movie details from OMDB API
-          const response = await fetch(`http://localhost:8001/movies/id/${selectedId}`);
+          const response = await fetch(`${URL}/movies/id/${selectedId}`);
           // GUARD CLAUSE - check for http error
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

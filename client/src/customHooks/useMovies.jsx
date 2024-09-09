@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import URL from '../urls.mjs';
+
 export function useMovies(query, setSelectedId) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false); //Loader state
@@ -37,7 +39,7 @@ export function useMovies(query, setSelectedId) {
           // START LOADER
           setIsLoading(true);
           // MAKE API CALL TO OMDB API
-          const response = await fetch(`http://localhost:8001/movies/${query}`, {
+          const response = await fetch(`${URL}/movies/${query}`, {
             signal: controller.signal, //Abort controller signal object
           });
           // GUARD CLAUSE - server connection interruoted error
