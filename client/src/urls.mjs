@@ -7,7 +7,7 @@ const development = {
   url: 'http://localhost:8001',
 };
 
-const config = process.env.NODE_ENV === 'development' ? development : production;
+const config = process.env.REACT_APP_NODE_ENV === 'development' ? development : production;
 
 const URL = config.url;
 
