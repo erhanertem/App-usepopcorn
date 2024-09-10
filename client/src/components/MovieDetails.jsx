@@ -4,7 +4,7 @@ import { useKey } from '../customHooks/useKey';
 import StarRating from './StarRating';
 import ErrorMessage from './ErrorMessage';
 import Loader from './Loader';
-import URL from '../urls.mjs';
+import URL from '../urls.js';
 
 export default function MovieDetails({ selectedId, onCloseMovie, onAddWatchedMovie, watched }) {
   const [movie, setMovie] = useState({});

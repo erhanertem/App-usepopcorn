@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import URL from '../urls.mjs';
+import URL from '../urls.js';
 
 export function useMovies(query, setSelectedId) {
   const [movies, setMovies] = useState([]);

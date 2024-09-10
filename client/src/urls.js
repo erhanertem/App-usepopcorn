@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 const production = {
   url: 'https://app-usepopcorn-api-erhan-ertem.onrender.com',
 };
