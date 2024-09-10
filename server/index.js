@@ -9,6 +9,7 @@ const app = express();
 
 const allowedOrigins = [
   'http://localhost:3000',
+  'https://app-usepopcorn-erhan-ertem.onrender.com',
   'http://localhost:8001',
   'https://app-usepopcorn-server-erhan-ertem.onrender.com',
 ];
