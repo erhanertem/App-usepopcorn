@@ -30,7 +30,7 @@ In addition to the curriculum:
 
 &emsp;
 
-###### ⚠️Free-tier render services may experience throttling, leading to delayed app loading times.
+###### ⚠️Free-tier render services may experience throttling, leading to delayed app loading times. Since API & client are being hosted separetly, getting backend online may take additional time to respond due to enforced spin-downs on Free-tiers. 
 
 #### [Use-PopCorn App](https://app-usepopcorn-erhan-ertem.onrender.com)
 
