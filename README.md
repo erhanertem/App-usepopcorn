@@ -22,12 +22,15 @@
 
 In addition to the curriculum:
 
-- ⛔DEBUNKED Included dotenv via webpack configuration for React App (still doesn't help hide api key)
-- Create a mini backend to serve API access with dotenv secret
+- Setup API and client hosting separetly on render.com
+  - Included dotenv via webpack configuration for React App (node_env url setting switching)
+  - Created a mini backend to serve API access with dotenv API secret
 - More flexible useKey custom Hook for multiple key entries
 - Fix null fetched IMDB rating causing NaN average rating error
 
 &emsp;
+
+###### ⚠️Free-tier render services may experience throttling, leading to delayed app loading times.
 
 #### [Use-PopCorn App](https://app-usepopcorn-erhan-ertem.onrender.com)
 
@@ -38,3 +41,4 @@ In addition to the curriculum:
 ![JS](https://img.shields.io/badge/JavaScript-323330?style=square&logo=javascript&logoColor=F7DF1E)
 ![React](https://img.shields.io/badge/React-20232A?style=square&logo=react&logoColor=61DAF)
 ![Webpack](https://img.shields.io/badge/Webpack-%238DD6F9.svg?style=square&logo=Webpack&logoColor=black)
+![ExpressJs](https://img.shields.io/badge/Express.js-000000?style=square&logo=express&logoColor=white)
