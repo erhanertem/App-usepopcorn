@@ -32,7 +32,7 @@ In addition to the curriculum:
 
 ###### ⚠️Free-tier render services may experience throttling, leading to delayed app loading times. Since the API and client are hosted separately, getting the backend online may take additional time to respond due to enforced spin-downs on free-tier services.
 
-#### <img src="./push.gif" width="25px" style="transform:rotate(90deg);"/> [Use-PopCorn App](https://app-usepopcorn-erhan-ertem.onrender.com)
+#### <img src="./push.gif" width="30px"/>[Use-PopCorn App](https://app-usepopcorn-erhan-ertem.onrender.com)
 
 <img src="./screenshot.webp" width="500px"/>
 
